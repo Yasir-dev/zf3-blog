@@ -1,4 +1,7 @@
 <?php
+
+use Doctrine\DBAL\Driver\PDOMySql\Driver;
+
 /**
  * Local Configuration Override
  *
@@ -12,4 +15,17 @@
  */
 
 return [
+    'doctrine' => [
+        'connection' => [
+            'orm_default' => [
+                'driverClass' => Driver::class,
+                'params' => [
+                    'host'     => 'localhost',
+                    'user'     => '<user>',
+                    'password' => '<password>',
+                    'dbname'   => 'blog',
+                ]
+            ],
+        ],
+    ],
 ];

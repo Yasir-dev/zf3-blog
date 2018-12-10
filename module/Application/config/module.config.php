@@ -7,6 +7,14 @@
 
 namespace Application;
 
+use Application\Controller\Factory\PostControllerFactory;
+use Application\Controller\IndexController;
+use Application\Controller\Factory\IndexControllerFactory;
+use Application\Controller\PostController;
+use Application\Service\PostManager;
+use Application\Service\Factory\PostManagerFactory;
+use Doctrine\ORM\Mapping\Driver\AnnotationDriver;
+use Zend\Json\Server\Smd\Service;
 use Zend\Router\Http\Literal;
 use Zend\Router\Http\Segment;
 use Zend\ServiceManager\Factory\InvokableFactory;
@@ -34,13 +42,36 @@ return [
                     ],
                 ],
             ],
+
+            'posts' => [
+                'type'    => Segment::class,
+                'options' => [
+                    'route'    => '/posts[/:action[/:id]]',
+                    'constraints' => [
+                        'action' => '[a-zA-Z][a-zA-Z0-9_-]*',
+                        'id' => '[0-9]*'
+                    ],
+                    'defaults' => [
+                        'controller'    => Controller\PostController::class,
+                        'action'        => 'index',
+                    ],
+                ],
+            ],
         ],
     ],
     'controllers' => [
         'factories' => [
-            Controller\IndexController::class => InvokableFactory::class,
+            IndexController::class => IndexControllerFactory::class,
+            PostController::class  => PostControllerFactory::class
         ],
     ],
+
+    'service_manager' => [
+        'factories' => [
+            PostManager::class => PostManagerFactory::class
+        ],
+    ],
+
     'view_manager' => [
         'display_not_found_reason' => true,
         'display_exceptions'       => true,
@@ -57,4 +88,20 @@ return [
             __DIR__ . '/../view',
         ],
     ],
+
+    //register entities with orm
+    'doctrine' => [
+        'driver' => [
+            __NAMESPACE__ . '_driver' => [
+                'class' => AnnotationDriver::class,
+                'cache' => 'array',
+                'paths' => [__DIR__ . '/../src/Entity']
+            ],
+            'orm_default' => [
+                'drivers' => [
+                    __NAMESPACE__ . '\Entity' => __NAMESPACE__ . '_driver'
+                ]
+            ]
+        ]
+    ]
 ];

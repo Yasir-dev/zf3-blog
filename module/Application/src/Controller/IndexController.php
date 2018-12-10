@@ -7,13 +7,33 @@
 
 namespace Application\Controller;
 
+use Application\Entity\Post;
+use Doctrine\ORM\EntityManager;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
 
 class IndexController extends AbstractActionController
 {
+    /**
+     * @var EntityManager
+     */
+    private $entityManager;
+
+    /**
+     * IndexController constructor.
+     */
+    public function __construct(EntityManager $entityManager)
+    {
+        $this->entityManager = $entityManager;
+    }
+
     public function indexAction()
     {
-        return new ViewModel();
+        $posts = $this->entityManager->getRepository(Post::class)
+            ->findBy(['status'=> Post::PUBLISHED],
+                ['dateCreated'=>'DESC']);
+
+
+        return new ViewModel(['posts' => $posts]);
     }
 }

@@ -1,6 +1,7 @@
 <?php
 namespace Application\Controller;
 
+use Application\Entity\Post;
 use Application\Form\PostForm;
 use Application\Service\PostManager;
 use Doctrine\ORM\EntityManager;
@@ -47,5 +48,47 @@ class PostController extends AbstractActionController
         }
 
         return new ViewModel(['form' => $form]);
+    }
+
+
+    public function editAction()
+    {
+        $form = new PostForm();
+        $postId = $this->params()->fromRoute('id', -1);
+
+        $post = $this->entityManager->getRepository(Post::class)
+            ->findOneById($postId);
+
+        if (null === $post) {
+            $this->getResponse()->setStatusCode(404);
+            return;
+        }
+
+        if ($this->getRequest()->isPost()) {
+            $form->setData($this->params()->fromPost());
+
+            if ($form->isValid()) {
+                $this->postManager->updatePost($form->getData(), $post);
+
+                return $this->redirect()->toRoute('post', ['action' => 'admin']);
+            }
+        }
+
+        else {
+            $data = [
+                'title' => $post->getTitle(),
+                'content' => $post->getContent(),
+                'tags' => $this->postManager->convertTagsToString($post),
+                'status' => $post->getStatus()
+            ];
+
+            $form->setData($data);
+        }
+
+        // Render the view template.
+        return new ViewModel([
+            'form' => $form,
+            'post' => $post
+        ]);
     }
 }

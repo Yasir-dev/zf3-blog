@@ -39,6 +39,17 @@ class PostManager
         $this->entityManager->flush();
     }
 
+    public function updatePost(array $data, Post $post)
+    {
+        $post->setTitle($data['title'])
+            ->setContent($data['content'])
+            ->setStatus($data['status']);
+
+        $this->addTags($data['tags'], $post);
+
+        $this->entityManager->flush();
+    }
+
     private function addTags(string $tagsString, Post $post)
     {
         foreach ($post->getTags() as $tag)
@@ -65,5 +76,22 @@ class PostManager
             $this->entityManager->persist($tag);
             $post->setTag($tag);
         }
+    }
+
+    public function convertTagsToString($post)
+    {
+        $tags = $post->getTags();
+
+        $tagCount = count($tags);
+        $tagsStr = '';
+        $i = 0;
+        foreach ($tags as $tag) {
+            $i ++;
+            $tagsStr .= $tag->getName();
+            if ($i < $tagCount)
+                $tagsStr .= ', ';
+        }
+
+        return $tagsStr;
     }
 }

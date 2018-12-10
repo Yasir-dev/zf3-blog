@@ -73,13 +73,13 @@ class Post
     private $comments;
 
     /**
-     * @var ArrayCollection
+     * @var Traversable
      *
-     * @ORM\ManyToMany(targetEntity="\Application\Entity\Tag", mappedBy="post")
-         * @ORM\JoinTable(name="post_tag",
-     *     joinColumns={@ORM\JoinColumn(name="post_id", referencedColumnName="id")},
-     *     inverseJoinColumns={@ORM\JoinColumn(name="tag_id", referencedColumnName="id")}
-     *     )
+     * @ORM\ManyToMany(targetEntity="\Application\Entity\Tag", inversedBy="posts")
+     * @ORM\JoinTable(name="post_tag",
+     *      joinColumns={@ORM\JoinColumn(name="post_id", referencedColumnName="id")},
+     *      inverseJoinColumns={@ORM\JoinColumn(name="tag_id", referencedColumnName="id")}
+     *      )
      */
     private $tags;
 
@@ -239,9 +239,9 @@ class Post
     /**
      * Return tags
      *
-     * @return array
+     * @return Traversable
      */
-    public function getTags(): ArrayCollection
+    public function getTags(): \Traversable
     {
         return $this->tags;
     }

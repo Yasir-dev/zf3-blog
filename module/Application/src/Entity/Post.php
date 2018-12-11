@@ -12,7 +12,7 @@ use Doctrine\Common\Collections\ArrayCollection;
  *
  * @author yasir khurshid <yasir.khurshid@gmail.com>
  *
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="\Application\Repository\PostRepository")
  * @ORM\Table(name="post")
  */
 class Post

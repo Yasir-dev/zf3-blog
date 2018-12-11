@@ -5,6 +5,7 @@ use Application\Entity\Post;
 use Application\Form\PostForm;
 use Application\Service\PostManager;
 use Doctrine\ORM\EntityManager;
+use Zend\Http\Response;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
 
@@ -19,9 +20,6 @@ class PostController extends AbstractActionController
      * @var PostManager
      */
     private $postManager;
-    /**
-     * @var PostManager
-     */
 
     /**
      * PostController constructor.
@@ -54,13 +52,11 @@ class PostController extends AbstractActionController
     public function editAction()
     {
         $form = new PostForm();
-        $postId = $this->params()->fromRoute('id', -1);
-
         $post = $this->entityManager->getRepository(Post::class)
-            ->findOneById($postId);
+            ->findOneById($this->getPostId());
 
         if (null === $post) {
-            $this->getResponse()->setStatusCode(404);
+            $this->getResponse()->setStatusCode(Response::STATUS_CODE_404);
             return;
         }
 
@@ -90,5 +86,31 @@ class PostController extends AbstractActionController
             'form' => $form,
             'post' => $post
         ]);
+    }
+
+    public function deleteAction()
+    {
+        $post = $this->entityManager
+            ->getRepository(Post::class)
+            ->findOneById($this->getPostId());
+
+        if (null === $post) {
+            $this->getResponse()->setStatusCode(Response::STATUS_CODE_404);
+            return;
+        }
+
+        $this->postManager->deletePost($post);
+
+        return $this->redirect()->toRoute('home');
+    }
+
+    /**
+     * Return post id
+     *
+     * @return int
+     */
+    private function getPostId()
+    {
+        return (int) $this->params()->fromRoute('id', -1);
     }
 }

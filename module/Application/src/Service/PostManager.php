@@ -50,6 +50,20 @@ class PostManager
         $this->entityManager->flush();
     }
 
+    public function deletePost(Post $post)
+    {
+        foreach ($post->getComments() as $comment) {
+            $this->entityManager->remove($comment);
+        }
+
+        foreach ($post->getTags() as $tag) {
+            $post->removeTag($tag);
+        }
+
+        $this->entityManager->remove($post);
+        $this->entityManager->flush();
+    }
+
     private function addTags(string $tagsString, Post $post)
     {
         foreach ($post->getTags() as $tag)

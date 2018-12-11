@@ -65,7 +65,7 @@ class Post
     private $dateCreated;
 
     /**
-     * @var array
+     * @var Traversable
      *
      * @ORM\OneToMany(targetEntity="\Application\Entity\Comment", mappedBy="post")
      * @ORM\JoinColumn(name="id", referencedColumnName="post_id")
@@ -215,9 +215,9 @@ class Post
     /**
      * Return comments
      *
-     * @return array
+     * @return \Traversable
      */
-    public function getComments(): array
+    public function getComments(): \Traversable
     {
         return $this->comments;
     }
@@ -225,11 +225,11 @@ class Post
     /**
      * Add a comment
      *
-     * @param array $comment Comment
+     * @param Comment $comment Comment
      *
      * @return Post
      */
-    public function setComment(array $comment): Post
+    public function setComment(Comment $comment): Post
     {
         $this->comments = $comment;
 

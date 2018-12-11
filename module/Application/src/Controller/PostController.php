@@ -135,6 +135,17 @@ class PostController extends AbstractActionController
         return $this->redirect()->toRoute('home');
     }
 
+    public function adminAction()
+    {
+        $posts = $this->entityManager->getRepository(Post::class)
+            ->findBy([], ['dateCreated' => 'DESC']);
+
+        return new ViewModel([
+            'posts' => $posts,
+            'postManager' => $this->postManager,
+            ]);
+    }
+
     /**
      * Return post id
      *

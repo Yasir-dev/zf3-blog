@@ -51,11 +51,7 @@ class PostForm extends Form
             ->setName('status')
             ->setLabel('Status')
             ->setAttribute('id', 'status')
-            ->setValueOptions(
-                [
-                    Post::DRAFT => 'draft',
-                    Post::PUBLISHED => 'publish'
-                ]);
+            ->setValueOptions(Post::STATUS);
 
         $submit = (new Submit())
             ->setName('submit')
@@ -105,7 +101,7 @@ class PostForm extends Form
         $status = (new Input())
             ->setName('status')
             ->setRequired(true)
-            ->setValidatorChain((new ValidatorChain())->attach((new InArray())->setHaystack([Post::DRAFT, Post::PUBLISHED])));
+            ->setValidatorChain((new ValidatorChain())->attach((new InArray())->setHaystack(Post::STATUS)));
 
         $inputFilter->add($title)
             ->add($content)

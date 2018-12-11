@@ -122,10 +122,22 @@ class PostManager
         return $tagsStr;
     }
 
-    public function getCommentCountString(Post $post)
+    public function getCommentCountString(Post $post):string
     {
         $count = $post->getComments()->count();
 
         return ($count === 1 ? "$count comment" : "$count comments");
+    }
+
+    /**
+     * Return post status
+     *
+     * @param Post $post
+     *
+     * @return string
+     */
+    public function getPostStatus(Post $post):string
+    {
+        return Post::STATUS[$post->getStatus()] ?? 'Unknown';
     }
 }

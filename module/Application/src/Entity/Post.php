@@ -18,14 +18,9 @@ use Doctrine\Common\Collections\ArrayCollection;
 class Post
 {
     /**
-     * post status draft
+     * Post status
      */
-    const DRAFT = 0;
-
-    /**
-     * post status published
-     */
-    const PUBLISHED = 1;
+    const STATUS = ['draft', 'publish'];
 
     /**
      * @var int

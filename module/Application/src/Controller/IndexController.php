@@ -30,7 +30,7 @@ class IndexController extends AbstractActionController
     public function indexAction()
     {
         $posts = $this->entityManager->getRepository(Post::class)
-            ->findBy(['status'=> Post::PUBLISHED],
+            ->findBy(['status'=> 1],
                 ['dateCreated'=>'DESC']);
 
 

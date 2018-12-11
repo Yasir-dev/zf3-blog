@@ -2,6 +2,7 @@
 namespace Application\Controller;
 
 use Application\Entity\Post;
+use Application\Form\CommentForm;
 use Application\Form\PostForm;
 use Application\Service\PostManager;
 use Doctrine\ORM\EntityManager;
@@ -31,6 +32,36 @@ class PostController extends AbstractActionController
     {
         $this->entityManager = $entityManager;
         $this->postManager   = $manager;
+    }
+
+    public function viewAction()
+    {
+        $post = $this->entityManager->getRepository(Post::class)
+            ->findOneById($this->getPostId());
+
+        if (null === $post) {
+            $this->getResponse()->setStatusCode(Response::STATUS_CODE_404);
+            return;
+        }
+
+        $commentCount = $this->postManager->getCommentCountString($post);
+        $form = new CommentForm();
+
+        if ($this->getRequest()->isPost()) {
+            $form->setData($this->params()->fromPost());
+            if ($form->isValid()) {
+                $this->postManager->addComment($post, $form->getData());
+
+                return $this->redirect()->toRoute('posts', ['action' => 'view', 'id' => $this->getPostId()]);
+            }
+        }
+
+        return new ViewModel([
+            'post' => $post,
+            'commentCount' => $commentCount,
+            'form' => $form,
+            'postManager' => $this->postManager
+            ]);
     }
 
     public function addAction()

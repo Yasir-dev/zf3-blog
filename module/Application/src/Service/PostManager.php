@@ -2,6 +2,7 @@
 
 namespace Application\Service;
 
+use Application\Entity\Comment;
 use Application\Entity\Post;
 use Application\Entity\Tag;
 use Doctrine\ORM\EntityManager;
@@ -92,6 +93,18 @@ class PostManager
         }
     }
 
+    public function addComment(Post $post, array $data)
+    {
+        $comment = (new Comment())
+            ->setPost($post)
+            ->setAuthor($data['author'])
+            ->setContent($data['comment'])
+            ->setDateCreated(date('Y-m-d H:i:s'));
+
+        $this->entityManager->persist($comment);
+        $this->entityManager->flush();
+    }
+
     public function convertTagsToString($post)
     {
         $tags = $post->getTags();
@@ -107,5 +120,12 @@ class PostManager
         }
 
         return $tagsStr;
+    }
+
+    public function getCommentCountString(Post $post)
+    {
+        $count = $post->getComments()->count();
+
+        return ($count === 1 ? "$count comment" : "$count comments");
     }
 }

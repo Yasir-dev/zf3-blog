@@ -1,0 +1,77 @@
+<?php
+/**
+ * @var \Application\Form\CommentForm $form
+ */
+$form = $this->form;
+$form->get('author')
+    ->setAttribute('class', 'form-control')
+    ->setAttribute('placeholder', 'Name of Author');
+
+$form->get('comment')
+    ->setAttribute('class', 'form-control')
+    ->setAttribute('placeholder', 'Enter comment here')
+    ->setAttribute('rows', 6);
+
+$form->get('submit')->setAttribute('class', 'btn btn-primary');
+$form->prepare();
+?>
+
+<a href="<?= $this->url('application', ['action'=>'index']); ?>">
+    &lt;&lt; Show All Posts
+</a>
+
+<h1>
+    <?= $this->escapeHtml($post->getTitle()); ?>
+</h1>
+
+<p class="comments-header">
+    <?= $this->escapeHtml($postManager->getCommentCountString($post)); ?> |
+    <a href="#comment">
+        Add new comment
+    </a>
+</p>
+
+<p>
+    Published: <?= $this->escapeHtml(date('jS \of F Y', strtotime($post->getDateCreated()))); ?>
+    | Tags: <?= $this->escapeHtml($postManager->convertTagsToString($post)); ?>
+</p>
+
+<p>
+    <?= $this->escapeHtml($post->getContent()); ?>
+</p>
+
+<h3><?= $this->escapeHtml($postManager->getCommentCountString($post)); ?></h3>
+
+<?php foreach ($post->getComments() as $comment): ?>
+
+    <hr>
+
+    <p>
+        <?= $this->escapeHtml($comment->getAuthor()) ?> on
+        <?= $this->escapeHtml($comment->getDateCreated()); ?>
+    </p>
+
+    <p>
+        <?= $this->escapeHtml($comment->getContent()); ?>
+    </p>
+
+<?php endforeach; ?>
+
+<hr>
+
+<a name="comment"></a>
+<h3>Leave Reply</h3>
+
+<div class="row">
+    <div class="col-md-8">
+        <?= $this->form()->openTag($form); ?>
+            <div class="form-group">
+                <?= $this->formRow($form->get('author')); ?>
+            </div>
+            <div class="form-group">
+                <?= $this->formRow($form->get('comment')); ?>
+            </div>
+            <?= $this->formSubmit($form->get('submit')); ?>
+        <?= $this->form()->closeTag(); ?>
+    </div>
+</div>

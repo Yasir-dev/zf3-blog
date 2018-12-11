@@ -73,7 +73,7 @@ class Post
     private $comments;
 
     /**
-     * @var Traversable
+     * @var \Traversable
      *
      * @ORM\ManyToMany(targetEntity="\Application\Entity\Tag", inversedBy="posts")
      * @ORM\JoinTable(name="post_tag",
@@ -265,7 +265,7 @@ class Post
      *
      * @param string $tag
      */
-    public function removeTag(string $tag)
+    public function removeTag(Tag $tag)
     {
         $this->tags->removeElement($tag);
     }

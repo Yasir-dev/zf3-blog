@@ -43,7 +43,7 @@ class PostController extends AbstractActionController
             if ($form->isValid()) {
                 $this->postManager->addPost($form->getData());
 
-                return $this->redirect()->toRoute('application');
+                return $this->redirect()->toRoute('home');
             }
         }
 
@@ -70,7 +70,7 @@ class PostController extends AbstractActionController
             if ($form->isValid()) {
                 $this->postManager->updatePost($form->getData(), $post);
 
-                return $this->redirect()->toRoute('post', ['action' => 'admin']);
+                return $this->redirect()->toRoute('posts', ['action' => 'admin']);
             }
         }
 

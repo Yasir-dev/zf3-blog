@@ -164,7 +164,7 @@ class PostManager
          */
         foreach ($tags as $tag) {
             $postsHavingTag = $this->entityManager->getRepository(Post::class)
-                ->findPostsByTag($tag->getName());
+                ->findPostsByTag($tag->getName())->getResult();
 
             $count = \count($postsHavingTag);
             if ($count > 0) {

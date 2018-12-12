@@ -4,9 +4,27 @@ namespace Application\Repository;
 
 use Application\Entity\Post;
 use Doctrine\ORM\EntityRepository;
+use Doctrine\ORM\Query;
 
 class PostRepository extends EntityRepository
 {
+    /**
+     * Return the Query object (posts) with process DQL(Doctrine query language)
+     *
+     * @return Query
+     */
+    public function findPosts()
+    {
+        $queryBuilder = $this->getEntityManager()->createQueryBuilder();
+        $queryBuilder->select('p')
+            ->from(Post::class, 'p')
+            ->where('p.status = ?1')
+            ->orderBy('p.dateCreated', 'DESC')
+            ->setParameter('1', 1);
+
+        return $queryBuilder->getQuery();
+    }
+
     /**
      * Find post having tags
      *
@@ -26,11 +44,11 @@ class PostRepository extends EntityRepository
     }
 
     /**
-     * Find posts having a given tag
+     * Return the Query object (find post by tag) with process DQL(Doctrine query language)
      *
      * @param string $tag
      *
-     * @return mixed
+     * @return Query
      */
     public function findPostsByTag(string $tag)
     {
@@ -44,6 +62,6 @@ class PostRepository extends EntityRepository
             ->setParameter('1', 1)
             ->setParameter('2', $tag);
 
-        return $queryBuilder->getQuery()->getResult();
+        return $queryBuilder->getQuery();
     }
 }

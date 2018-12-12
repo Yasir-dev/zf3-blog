@@ -10,7 +10,11 @@ namespace Application\Controller;
 use Application\Entity\Post;
 use Application\Service\PostManager;
 use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\Query;
+use Doctrine\ORM\Tools\Pagination\Paginator as ORMPaginator;
+use DoctrineORMModule\Paginator\Adapter\DoctrinePaginator as DoctrineAdapter;
 use Zend\Mvc\Controller\AbstractActionController;
+use Zend\Paginator\Paginator;
 use Zend\View\Model\ViewModel;
 
 class IndexController extends AbstractActionController
@@ -36,19 +40,30 @@ class IndexController extends AbstractActionController
 
     public function indexAction()
     {
-        $posts = $this->entityManager->getRepository(Post::class)
-            ->findBy(['status'=> 1],
-                ['dateCreated'=>'DESC']);
+        //get query object from doctrin entity repo
+        /**
+         * @var Query $query
+         */
+        $query = $this->entityManager->getRepository(Post::class)
+            ->findPosts();
 
+        //get query parameters
         $tag = $this->params()->fromQuery('tag', null);
+        $page = $this->params()->fromQuery('page', 1);
 
         if ($tag) {
-            $posts = $this->entityManager->getRepository(Post::class)
+            $query = $this->entityManager->getRepository(Post::class)
                 ->findPostsByTag($tag);
         }
 
+        //set pagination
+        $adapter   = new DoctrineAdapter((new ORMPaginator($query, false)));
+        $paginator = (new Paginator($adapter))
+            ->setItemCountPerPage(4)
+            ->setCurrentPageNumber($page);
+
         return new ViewModel([
-            'posts' => $posts,
+            'posts' => $paginator,
             'postManager' => $this->postManager
         ]);
     }

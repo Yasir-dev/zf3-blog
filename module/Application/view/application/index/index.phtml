@@ -22,6 +22,9 @@
                 <?= $this->escapeHtml($post->getContent()); ?>
             </p>
         <?php endforeach; ?>
+
+        <!--Pagination partial template-->
+        <?= $this->paginationControl($posts, 'Sliding', 'application/partial/pagination', ['route' =>'application']); ?>
     </div>
     <div class="col-md-4">
         <div class="panel panel-default">

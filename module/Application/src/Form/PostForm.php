@@ -69,44 +69,54 @@ class PostForm extends Form
     {
         $inputFilter = (new InputFilter());
 
-        $filter = (new FilterChain())
+        $title = (new Input())
+            ->setName('title')
+            ->setRequired(true);
+
+        $title->getFilterChain()
             ->attach(new StringTrim())
             ->attach(new StripTags())
             ->attach(new StripNewlines());
 
-        $validator = (new ValidatorChain());
-        $validator->attach(
-            (new StringLength())->setMin(1)->setMax(1024)
-        );
+        $title->getValidatorChain()
+            ->attach((new StringLength())->setMin(1)->setMax(1024));
 
-        $title = (new Input())
-            ->setName('title')
-            ->setRequired(true)
-            ->setFilterChain($filter)
-            ->setValidatorChain($validator);
+        $inputFilter->add($title);
+
 
         $content = (new Input())
             ->setRequired(true)
-            ->setName('content')
-            ->setFilterChain((new FilterChain())->attach(new StringTrim()))
-            ->setValidatorChain((new ValidatorChain())->attach((new StringLength())->setMin(1)->setMax(1024)));
+            ->setName('content');
 
+         $content->getFilterChain()
+             ->attach(new StringTrim());
+         $content->getValidatorChain()
+             ->attach((new StringLength())->setMin(1)->setMax(1024));
+
+        $inputFilter->add($content);
 
         $tags = (new Input())
             ->setName('tags')
-            ->setRequired(true)
-            ->setFilterChain($filter)
-            ->setValidatorChain($validator);
+            ->setRequired(true);
+
+        $tags->getFilterChain()
+            ->attach(new StringTrim())
+            ->attach(new StripTags())
+            ->attach(new StripNewlines());
+
+        $tags->getValidatorChain()
+            ->attach((new StringLength())->setMin(1)->setMax(1024));
+
+        $inputFilter->add($tags);
 
         $status = (new Input())
             ->setName('status')
-            ->setRequired(true)
-            ->setValidatorChain((new ValidatorChain())->attach((new InArray())->setHaystack(Post::STATUS)));
+            ->setRequired(true);
 
-        $inputFilter->add($title)
-            ->add($content)
-            ->add($tags)
-            ->add($status);
+        $status->getValidatorChain()
+            ->attach((new InArray())->setHaystack(Post::STATUS));
+
+        $inputFilter->add($status);
 
         $this->setInputFilter($inputFilter);
     }

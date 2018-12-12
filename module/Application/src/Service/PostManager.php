@@ -140,4 +140,42 @@ class PostManager
     {
         return Post::STATUS[$post->getStatus()] ?? 'Unknown';
     }
+
+    /**
+     * Return tag cloud
+     *
+     * @return array
+     */
+    public function getTagCloud()
+    {
+        $cloud = [];
+        $tagCloud = [];
+
+        $posts = $this->entityManager->getRepository(Post::class)
+            ->findPostsWithTag();
+
+        $postsCount = \count($posts);
+
+        $tags = $this->entityManager->getRepository(Tag::class)
+            ->findAll();
+
+        /**
+         * @var Tag $tag
+         */
+        foreach ($tags as $tag) {
+            $postsHavingTag = $this->entityManager->getRepository(Post::class)
+                ->findPostsByTag($tag->getName());
+
+            $count = \count($postsHavingTag);
+            if ($count > 0) {
+                $cloud[$tag->getName()] = $count;
+            }
+        }
+
+        foreach ($cloud as $name => $count) {
+            $tagCloud[$name] = \number_format($count/$postsCount, 2);
+        }
+
+        return $tagCloud;
+    }
 }

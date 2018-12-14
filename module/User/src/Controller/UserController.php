@@ -9,6 +9,7 @@ namespace User\Controller;
 
 use Doctrine\ORM\EntityManager;
 use User\Entity\User;
+use User\Form\UserForm;
 use User\Service\UserManager;
 use Zend\Mvc\Controller\AbstractActionController;
 use DoctrineORMModule\Paginator\Adapter\DoctrinePaginator as DoctrineAdapter;
@@ -59,5 +60,94 @@ class UserController extends AbstractActionController
         return new ViewModel([
             'users' => $paginator
         ]);
+    }
+
+    public function viewAction()
+    {
+        $user = $this->getUser($this->getUserId());
+
+        if (null === $user) {
+            $this->getResponse()->setStatusCode(404);
+        }
+
+        return new ViewModel([
+            'user' => $user
+        ]);
+    }
+
+    public function addAction()
+    {
+        $form = new UserForm();
+
+        if ($this->getRequest()->isPost()) {
+            $form->setData($this->params()->fromPost());
+            if ($form->isValid()) {
+                $user = $this->userManager->addUser($form->getData());
+
+                return $this->redirect()->toRoute('users', ['action' => 'view', 'id' => $user->getId()]);
+            }
+        }
+
+        return new ViewModel([
+            'form' => $form
+        ]);
+    }
+
+    public function editAction()
+    {
+        $user = $this->getUser($this->getUserId());
+
+        if (null === $user) {
+            $this->getResponse()->setStatusCode(404);
+        }
+
+        $form = new UserForm('edit');
+        if ($this->getRequest()->isPost()) {
+            $form->setData($this->params()->fromPost());
+            if ($form->isValid()) {
+                $this->userManager->updateUser($user, $form->getData());
+
+                return $this->redirect()->toRoute('users', ['action' => 'view', 'id' => $user->getId()]);
+            }
+        } else {
+            $form->setData([
+                'full_name' => $user->getFullName(),
+                'email' => $user->getEmail(),
+                'status' => $user->getStatus(),
+            ]);
+        }
+
+        return new ViewModel(array(
+            'user' => $user,
+            'form' => $form
+        ));
+    }
+
+    public function changePasswordAction()
+    {
+        $user = $this->getUser($this->getUserId());
+
+        if (null === $user) {
+            $this->getResponse()->setStatusCode(404);
+        }
+
+    }
+
+    /**
+     * @return mixed
+     */
+    private function getUserId()
+    {
+        return $this->params()->fromRoute('id', -1);
+    }
+
+    /**
+     * @param $id
+     *
+     * @return null|object
+     */
+    private function getUser($id)
+    {
+        return $this->entityManager->getRepository(User::class)->find($id);
     }
 }

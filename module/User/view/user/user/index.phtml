@@ -24,7 +24,7 @@
                 </td>
                 <td><?= $this->escapeHtml($user->getFullName()); ?></td>
                 <td><?= $this->escapeHtml($user->getDateCreated()); ?></td>
-                <td><?= $this->escapeHtml($user->getStatusAsString()); ?></td>
+                <td><?= $this->escapeHtml($user->getStatus()); ?></td>
                 <td>
                     <a class="btn btn-info" href="<?= $this->url('users', ['action' => 'edit', 'id' => $user->getId()]); ?>">
                         <span class="glyphicon glyphicon-pencil" ></span> Edit

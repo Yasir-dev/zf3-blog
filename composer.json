@@ -18,7 +18,8 @@
         "zfcampus/zf-development-mode": "^3.0",
         "zendframework/zend-mvc-form": "^1.0",
         "doctrine/doctrine-orm-module": "^2.1",
-        "zendframework/zend-paginator": "^2.8"
+        "zendframework/zend-paginator": "^2.8",
+        "zendframework/zend-crypt": "^3.3"
     },
     "autoload": {
         "psr-4": {

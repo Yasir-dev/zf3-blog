@@ -1,0 +1,26 @@
+<div class="row">
+    <div class="col-md-6">
+        <table class="table table-striped table-bordered">
+            <tr>
+                <th>ID:</th>
+                <td><?= $this->escapeHtml($user->getId()) ?></th>
+            </tr>
+            <tr>
+                <th>E-mail:</th>
+                <td><?= $this->escapeHtml($user->getEmail()) ?></th>
+            </tr>
+            <tr>
+                <th>Full Name:</th>
+                <td><?= $this->escapeHtml($user->getFullName()) ?></th>
+            </tr>
+            <tr>
+                <th>Date Created:</th>
+                <td><?= $this->escapeHtml($user->getDateCreated()) ?></th>
+            </tr>
+            <tr>
+                <th>Status:</th>
+                <td><?= $this->escapeHtml($user->getStatus()) ?></th>
+            </tr>
+        </table>
+    </div>
+</div>

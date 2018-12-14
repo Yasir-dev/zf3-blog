@@ -17,8 +17,8 @@ class UserRepository extends EntityRepository
     {
         $queryBuilder = $this->getEntityManager()->createQueryBuilder();
         $queryBuilder->select('u')
-            ->from(User::ACTIVE, 'u')
-            ->orderBy('dateCreated', 'DESC');
+            ->from(User::class, 'u')
+            ->orderBy('u.dateCreated', 'DESC');
 
         return $queryBuilder->getQuery();
     }

@@ -1,10 +1,6 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: yasir
- * Date: 14.12.18
- * Time: 12:20
- */
+
+namespace User\Service;
 
 class UserManager
 {

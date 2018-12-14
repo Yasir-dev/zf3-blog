@@ -1,38 +1,64 @@
 <?php
-namespace Foo;
+namespace User;
 
-use Zend\Router\Http\Literal;
-use Zend\ServiceManager\Factory\InvokableFactory;
+use Doctrine\ORM\Mapping\Driver\AnnotationDriver;
+use User\Controller\Factory\UserControllerFactory;
+use User\Controller\UserController;
+use User\Service\Factory\UserManagerFactory;
+use User\Service\UserManager;
+use Zend\Router\Http\Segment;
 
 return [
-    'controllers' => [
-        'factories' => [
-            Controller\SkeletonController::class => InvokableFactory::class,
-        ],
-    ],
     'router' => [
         'routes' => [
-            'module-name-here' => [
-                'type'    => Literal::class,
+            'users' => [
+                'type'    => Segment::class,
                 'options' => [
-                    // Change this to something specific to your module
-                    'route'    => '/module-specific-root',
+                    'route'    => '/users[/:action[/:id]]',
+                    'constraints' => [
+                        'action' => '[a-zA-Z][a-zA-Z0-9_-]*',
+                        'id' => '[a-zA-Z0-9_-]*',
+                    ],
                     'defaults' => [
-                        'controller'    => Controller\SkeletonController::class,
+                        'controller'    => UserController::class,
                         'action'        => 'index',
                     ],
-                ],
-                'may_terminate' => true,
-                'child_routes' => [
-                    // You can place additional routes that match under the
-                    // route defined above here.
                 ],
             ],
         ],
     ],
-    'view_manager' => [
-        'template_path_stack' => [
-            'Foo' => __DIR__ . '/../view',
+
+    'controllers' => [
+        'factories' => [
+            UserController::class => UserControllerFactory::class,
         ],
     ],
+
+    'service_manager' => [
+        'factories' => [
+            UserManager::class => UserManagerFactory::class,
+        ],
+    ],
+
+    'view_manager' => [
+        'template_path_stack' => [
+            __DIR__ . '/../view',
+        ],
+    ],
+
+    //register entities with orm
+    'doctrine' => [
+        'driver' => [
+            __NAMESPACE__ . '_driver' => [
+                'class' => AnnotationDriver::class,
+                'cache' => 'array',
+                'paths' => [__DIR__ . '/../src/Entity']
+            ],
+            'orm_default' => [
+                'drivers' => [
+                    __NAMESPACE__ . '\Entity' => __NAMESPACE__ . '_driver'
+                ]
+            ]
+        ]
+    ]
 ];

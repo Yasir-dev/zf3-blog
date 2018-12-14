@@ -14,10 +14,8 @@ use Application\Controller\PostController;
 use Application\Service\PostManager;
 use Application\Service\Factory\PostManagerFactory;
 use Doctrine\ORM\Mapping\Driver\AnnotationDriver;
-use Zend\Json\Server\Smd\Service;
 use Zend\Router\Http\Literal;
 use Zend\Router\Http\Segment;
-use Zend\ServiceManager\Factory\InvokableFactory;
 
 return [
     'router' => [

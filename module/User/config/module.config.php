@@ -1,6 +1,7 @@
 <?php
 namespace Foo;
 
+use Zend\Router\Http\Literal;
 use Zend\ServiceManager\Factory\InvokableFactory;
 
 return [
@@ -12,7 +13,7 @@ return [
     'router' => [
         'routes' => [
             'module-name-here' => [
-                'type'    => 'Literal',
+                'type'    => Literal::class,
                 'options' => [
                     // Change this to something specific to your module
                     'route'    => '/module-specific-root',

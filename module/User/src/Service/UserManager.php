@@ -56,10 +56,12 @@ class UserManager
      * @param User $user
      * @param $data
      * @return bool
-     */
+     */##
+
+
     public function changePassword(User $user, $data)
     {
-        if ($this->verifyPassword($user, $data['password'])) {
+        if ($this->verifyPassword($user, $data['old_password'])) {
             $user->setPassword((new Bcrypt())->create($data['new_password']));
             $this->entityManager->flush($user);
 

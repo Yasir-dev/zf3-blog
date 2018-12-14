@@ -9,6 +9,7 @@ namespace User\Controller;
 
 use Doctrine\ORM\EntityManager;
 use User\Entity\User;
+use User\Form\PasswordChangeForn;
 use User\Form\UserForm;
 use User\Service\UserManager;
 use Zend\Mvc\Controller\AbstractActionController;
@@ -131,6 +132,24 @@ class UserController extends AbstractActionController
             $this->getResponse()->setStatusCode(404);
         }
 
+        $form = new PasswordChangeForn();
+        if ($this->getRequest()->isPost()){
+            $form->setData($this->params()->fromPost());
+
+            if ($form->isValid()) {
+                if ($this->userManager->changePassword($user, $form->getData())) {
+                    $this->flashMessenger()->addSuccessMessage('password has been changed successfully!');
+                } else {
+                    $this->flashMessenger()->addErrorMessage('The old password is incorrect!');
+                }
+                    return $this->redirect()->toRoute('users', ['action' => 'view', 'id' => $user->getId()]);
+            }
+        }
+
+        return new ViewModel([
+            'user' => $user,
+            'form' => $form
+        ]);
     }
 
     /**

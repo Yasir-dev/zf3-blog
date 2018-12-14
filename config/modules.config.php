@@ -16,6 +16,7 @@ return [
     'Zend\Validator',
     'DoctrineModule',
     'DoctrineORMModule',
+    'Zend\Mvc\Plugin\FlashMessenger',
     'Application',
     'User'
 ];

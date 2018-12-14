@@ -9,7 +9,7 @@ use Doctrine\ORM\Mapping as ORM;
  * Class User
  * @package User\Entity
  *
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="User\Repository\UserRepository")
  * @ORM\Table(name="user")
  */
 class User
@@ -205,12 +205,12 @@ class User
     }
 
     /**
-     * @param mixed $passwordResetToken
+     * @param mixed $token
      * @return User
      */
-    public function setPasswordResetToken($passwordResetToken)
+    public function setPasswordResetToken($token)
     {
-        $this->passwordResetToken = $passwordResetToken;
+        $this->passwordResetToken = $token;
 
         return $this;
     }
@@ -224,12 +224,12 @@ class User
     }
 
     /**
-     * @param mixed $passwordResetTokenCreationDate
+     * @param mixed $date
      * @return User
      */
-    public function setPasswordResetTokenCreationDate($passwordResetTokenCreationDate)
+    public function setPasswordResetTokenCreationDate($date)
     {
-        $this->passwordResetTokenCreationDate = $passwordResetTokenCreationDate;
+        $this->passwordResetTokenCreationDate = $date;
 
         return $this;
     }

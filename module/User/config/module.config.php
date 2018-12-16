@@ -2,10 +2,18 @@
 namespace User;
 
 use Doctrine\ORM\Mapping\Driver\AnnotationDriver;
+use User\Controller\AuthenticationController;
+use User\Controller\Factory\AuthenticationControllerFactory;
 use User\Controller\Factory\UserControllerFactory;
 use User\Controller\UserController;
+use User\Service\AuthenticationAdapter;
+use User\Service\AuthenticationManager;
+use User\Service\Factory\AuthenticationAdaptorFactory;
+use User\Service\Factory\AuthenticationManagerFactory;
+use User\Service\Factory\AuthenticationServiceFactory;
 use User\Service\Factory\UserManagerFactory;
 use User\Service\UserManager;
+use Zend\Authentication\AuthenticationService;
 use Zend\Router\Http\Segment;
 
 return [
@@ -31,12 +39,16 @@ return [
     'controllers' => [
         'factories' => [
             UserController::class => UserControllerFactory::class,
+            AuthenticationController::class => AuthenticationControllerFactory::class
         ],
     ],
 
     'service_manager' => [
         'factories' => [
             UserManager::class => UserManagerFactory::class,
+            AuthenticationAdapter::class => AuthenticationAdaptorFactory::class,
+            AuthenticationService::class => AuthenticationServiceFactory::class,
+            AuthenticationManager::class => AuthenticationManagerFactory::class
         ],
     ],
 

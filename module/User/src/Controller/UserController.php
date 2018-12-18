@@ -193,6 +193,31 @@ class UserController extends AbstractActionController
         ]);
     }
 
+    public function setPasswordAction()
+    {
+        $email = $this->params()->fromQuery('email', null);
+        $token = $this->params()->fromQuery('token', null);
+
+        $this->validateToken($email, $token);
+
+        $form = new PasswordChangeForm('reset');
+
+        if ($this->getRequest()->isPost()) {
+            $form->setData($this->params()->fromPost());
+            if ($form->isValid()) {
+                $data = $form->getData();
+                $reset = $this->userManager->setNewPasswordViaToken($email, $token, $data['password']);
+                if (true === $reset) {
+                    return $this->redirect()->toRoute('users', ['action '=> 'message', 'id' => 'set']);
+                }
+
+                return $this->redirect()->toRoute('users', ['action'=>'message', 'id' => 'failed']);
+            }
+        }
+
+        return new ViewModel(['form' => $form]);
+    }
+
     /**
      * @return mixed
      */
@@ -209,5 +234,19 @@ class UserController extends AbstractActionController
     private function getUser($id)
     {
         return $this->entityManager->getRepository(User::class)->find($id);
+    }
+
+    private function validateToken($email, $token)
+    {
+        // Validate token length
+        if (null !== $token && (!is_string($token) || 32 !== strlen($token))) {
+            throw new \Exception('Invalid token type or length');
+        }
+
+        if ($token===null ||
+            !$this->userManager->validateToken($email, $token)) {
+            return $this->redirect()->toRoute('users',
+                ['action'=>'message', 'id'=>'failed']);
+        }
     }
 }

@@ -13,9 +13,12 @@ use Zend\Validator\StringLength;
 
 class PasswordChangeForm extends Form
 {
-    public function __construct()
+    private $formType;
+
+    public function __construct($type)
     {
         parent::__construct('password-change');
+        $this->formType = $type;
         $this->setAttribute('method', 'post');
         $this->addElements();
         $this->addInputFilters();
@@ -23,10 +26,12 @@ class PasswordChangeForm extends Form
 
     private function addElements()
     {
-        $oldPassword = (new Password())
-            ->setName('old_password')
-            ->setLabel('Old password');
-        $this->add($oldPassword);
+        if ('change' === $this->formType) {
+            $oldPassword = (new Password())
+                ->setName('old_password')
+                ->setLabel('Old password');
+            $this->add($oldPassword);
+        }
 
         $newPassword = (new Password())
             ->setName('new_password')
@@ -53,9 +58,11 @@ class PasswordChangeForm extends Form
     {
         $inputFilter = new InputFilter();
 
-        $OldPassword = (new Input())->setName('old_password')->setRequired(true);
-        $OldPassword->getValidatorChain()->attach((new StringLength())->setMin(6)->setMax(64));
-        $inputFilter->add($OldPassword);
+        if ($this->scenario == 'change') {
+            $OldPassword = (new Input())->setName('old_password')->setRequired(true);
+            $OldPassword->getValidatorChain()->attach((new StringLength())->setMin(6)->setMax(64));
+            $inputFilter->add($OldPassword);
+        }
 
         $newPassword = (new Input())->setName('new_password')->setRequired(true);
         $newPassword->getValidatorChain()->attach((new StringLength())->setMin(6)->setMax(64));

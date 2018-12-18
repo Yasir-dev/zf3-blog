@@ -35,18 +35,6 @@ class PasswordResetForm extends Form
         $captcha = new Captcha();
         $captcha->setName('captcha');
 
-//        $image = (new Image())
-//            ->setImgDir('public/img/captcha')
-//            ->setSuffix('.png')
-//            ->setImgUrl('/img/captcha/')
-//            ->setImgAlt('CAPTCHA Image')
-//            ->setFont('./data/font/thorne_shaded.ttf')
-//            ->setWidth(350)
-//            ->setHeight(100)
-//            ->setExpiration(600)
-//            ->setDotNoiseLevel(40)
-//            ->setLineNoiseLevel(3);
-
         $captcha->setCaptcha(new Figlet());
         $this->add($captcha);
 

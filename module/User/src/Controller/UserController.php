@@ -9,7 +9,9 @@ namespace User\Controller;
 
 use Doctrine\ORM\EntityManager;
 use User\Entity\User;
+use User\Form\PasswordChangeForm;
 use User\Form\PasswordChangeForn;
+use User\Form\PasswordResetForm;
 use User\Form\UserForm;
 use User\Service\UserManager;
 use Zend\Mvc\Controller\AbstractActionController;
@@ -132,7 +134,7 @@ class UserController extends AbstractActionController
             $this->getResponse()->setStatusCode(404);
         }
 
-        $form = new PasswordChangeForn();
+        $form = new PasswordChangeForm();
         if ($this->getRequest()->isPost()){
             $form->setData($this->params()->fromPost());
 
@@ -149,6 +151,45 @@ class UserController extends AbstractActionController
         return new ViewModel([
             'user' => $user,
             'form' => $form
+        ]);
+    }
+
+    public function resetPasswordAction()
+    {
+        $form = new PasswordResetForm();
+
+        if ($this->getRequest()->isPost()) {
+            $data = $this->params()->fromPost();
+            $form->setData($data);
+            if ($form->isValid()) {
+                $user = $this->entityManager->getRepository(User::class)->findOneByEmail($data['email']);
+                if (null !== $user && User::ACTIVE === $user->getStatus()) {
+                    $this->userManager->createPasswordResetToken($user);
+
+                    // Redirect to "message" page
+                    return $this->redirect()->toRoute('users', ['action' => 'message', 'id' => 'sent']);
+                }
+
+                return $this->redirect()->toRoute('users', ['action '=> 'message', 'id'=>'invalid-email']);
+            }
+        }
+        return new ViewModel([
+            'form' => $form
+        ]);
+    }
+
+    public function messageAction()
+    {
+        // Get message ID from route.
+        $id = (string)$this->params()->fromRoute('id');
+
+        // Validate input argument.
+        if($id!='invalid-email' && $id!='sent' && $id!='set' && $id!='failed') {
+            throw new \Exception('Invalid message ID specified');
+        }
+
+        return new ViewModel([
+            'id' => $id
         ]);
     }
 

@@ -7,7 +7,7 @@ use User\Service\AuthenticationAdapter;
 use Zend\Authentication\AuthenticationService;
 use Zend\ServiceManager\Factory\FactoryInterface;
 use Zend\Session\SessionManager;
-use Zend\Session\Storage\SessionStorage;
+use Zend\Authentication\Storage\Session as SessionStorage;
 
 class AuthenticationServiceFactory implements FactoryInterface
 {

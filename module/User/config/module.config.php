@@ -14,11 +14,54 @@ use User\Service\Factory\AuthenticationServiceFactory;
 use User\Service\Factory\UserManagerFactory;
 use User\Service\UserManager;
 use Zend\Authentication\AuthenticationService;
+use Zend\Router\Http\Literal;
 use Zend\Router\Http\Segment;
 
 return [
     'router' => [
         'routes' => [
+            'login' => [
+                'type' => Literal::class,
+                'options' => [
+                    'route'    => '/login',
+                    'defaults' => [
+                        'controller' => AuthenticationController::class,
+                        'action'     => 'login',
+                    ],
+                ],
+            ],
+            'logout' => [
+                'type' => Literal::class,
+                'options' => [
+                    'route'    => '/logout',
+                    'defaults' => [
+                        'controller' => AuthenticationController::class,
+                        'action'     => 'logout',
+                    ],
+                ],
+            ],
+
+            'reset-password' => [
+                'type' => Literal::class,
+                'options' => [
+                    'route'    => '/reset-password',
+                    'defaults' => [
+                        'controller' => UserController::class,
+                        'action'     => 'resetPassword',
+                    ],
+                ],
+            ],
+            'set-password' => [
+                'type' => Literal::class,
+                'options' => [
+                    'route'    => '/set-password',
+                    'defaults' => [
+                        'controller' => UserController::class,
+                        'action'     => 'setPassword',
+                    ],
+                ],
+            ],
+
             'users' => [
                 'type'    => Segment::class,
                 'options' => [
@@ -39,16 +82,16 @@ return [
     'controllers' => [
         'factories' => [
             UserController::class => UserControllerFactory::class,
-            AuthenticationController::class => AuthenticationControllerFactory::class
+            AuthenticationController::class => AuthenticationControllerFactory::class,
         ],
     ],
 
     'service_manager' => [
         'factories' => [
-            UserManager::class => UserManagerFactory::class,
-            AuthenticationAdapter::class => AuthenticationAdaptorFactory::class,
             AuthenticationService::class => AuthenticationServiceFactory::class,
-            AuthenticationManager::class => AuthenticationManagerFactory::class
+            AuthenticationAdapter::class => AuthenticationAdaptorFactory::class,
+            AuthenticationManager::class => AuthenticationManagerFactory::class,
+            UserManager::class => UserManagerFactory::class,
         ],
     ],
 

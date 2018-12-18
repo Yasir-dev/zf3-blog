@@ -11,7 +11,7 @@ use Zend\InputFilter\InputFilter;
 use Zend\Validator\Identical;
 use Zend\Validator\StringLength;
 
-class PasswordChangeForn extends Form
+class PasswordChangeForm extends Form
 {
     public function __construct()
     {

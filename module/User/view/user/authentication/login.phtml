@@ -1,0 +1,44 @@
+<?php
+$this->headTitle('Sign in');
+
+$form->get('email')
+    ->setAttribute('class', 'form-control')
+    ->setAttribute('placeholder', 'Email address')
+    ->setAttribute( 'autofocus', true);
+
+$form->get('password')
+    ->setAttribute('class', 'form-control')
+    ->setAttribute('placeholder', 'Password');
+
+$form->get('submit')
+    ->setAttribute('class', 'btn btn-lg btn-primary btn-block');
+$form->prepare();
+?>
+
+<div class="col-md-12">
+    <div class="row">
+        <div class="col-md-offset-4 col-md-3">
+            <form class="form-signin" method="post">
+                <div class="col-md-12">
+                    <h2 class="form-signin-heading">Please sign in</h2>
+                    <?php if ($isLoginError): ?>
+                        <div class="alert alert-warning" role="alert">
+                            Incorrect login and/or password.
+                            <a href="<?= $this->url('reset-password') ?>">Forgot password?</a>
+                        </div>
+                    <?php endif; ?>
+                    <?= $this->formRow($form->get('email')); ?>
+                    <?= $this->formRow($form->get('password')); ?>
+                    <div class="checkbox">
+                        <label>
+                            <?= $this->formElement($form->get('remember_me')); ?> Remember me
+                        </label>
+                    </div>
+                    <?= $this->formElement($form->get('redirect_url')); ?>
+                    <?= $this->formElement($form->get('csrf')) ?>
+                    <?= $this->formElement($form->get('submit')) ?>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

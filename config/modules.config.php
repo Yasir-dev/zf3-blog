@@ -17,6 +17,7 @@ return [
     'DoctrineModule',
     'DoctrineORMModule',
     'Zend\Mvc\Plugin\FlashMessenger',
+    'Zend\Session',
     'Application',
     'User'
 ];

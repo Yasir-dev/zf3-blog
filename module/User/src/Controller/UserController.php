@@ -133,7 +133,7 @@ class UserController extends AbstractActionController
             $this->getResponse()->setStatusCode(404);
         }
 
-        $form = new PasswordChangeForm();
+        $form = new PasswordChangeForm('change');
         if ($this->getRequest()->isPost()){
             $form->setData($this->params()->fromPost());
 

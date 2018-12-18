@@ -1,3 +1,8 @@
+<?php
+    $this->headTitle('View User');
+    $this->mainMenu()->setActiveItem('admin');
+?>
+
 <?= $this->flashMessenger()->render('error', ['alert', 'alert-warning']); ?>
 <?= $this->flashMessenger()->render('success', ['alert', 'alert-success']); ?>
 <?= $this->flashMessenger()->render('info', ['alert', 'alert-info']); ?>

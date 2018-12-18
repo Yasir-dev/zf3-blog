@@ -2,6 +2,10 @@
 /**
  * @var \Application\Form\PostForm $form
  */
+
+$this->headTitle('Edit Post');
+$this->mainMenu()->setActiveItem('myPosts');
+
 $form = $this->form;
 
 $form->get('title')

@@ -13,9 +13,11 @@ use Application\Controller\Factory\IndexControllerFactory;
 use Application\Controller\PostController;
 use Application\Service\PostManager;
 use Application\Service\Factory\PostManagerFactory;
+use Application\View\Helper\Menu;
 use Doctrine\ORM\Mapping\Driver\AnnotationDriver;
 use Zend\Router\Http\Literal;
 use Zend\Router\Http\Segment;
+use Zend\ServiceManager\Factory\InvokableFactory;
 
 return [
     'router' => [
@@ -85,6 +87,15 @@ return [
         'template_path_stack' => [
             __DIR__ . '/../view',
         ],
+    ],
+
+    'view_helpers' => [
+        'factories' => [
+            View\Helper\Menu::class => InvokableFactory::class,
+        ],
+        'aliases' => [
+            'mainMenu' => Menu::class
+        ]
     ],
 
     //register entities with orm

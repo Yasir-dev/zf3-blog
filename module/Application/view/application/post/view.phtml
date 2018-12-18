@@ -2,6 +2,10 @@
 /**
  * @var \Application\Form\CommentForm $form
  */
+
+$this->headTitle('View Post');
+$this->mainMenu()->setActiveItem('myPosts');
+
 $form = $this->form;
 $form->get('author')
     ->setAttribute('class', 'form-control')

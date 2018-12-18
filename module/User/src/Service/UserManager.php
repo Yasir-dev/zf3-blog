@@ -157,6 +157,7 @@ class UserManager
         $mail->addTo($user->getEmail(), $user->getFullName());
         $mail->setSubject('Password Reset');
 
+
         // Setup SMTP transport
         $transport = new SmtpTransport();
         $options   = new SmtpOptions($this->config['smtp']);

@@ -10,7 +10,6 @@ namespace User\Controller;
 use Doctrine\ORM\EntityManager;
 use User\Entity\User;
 use User\Form\PasswordChangeForm;
-use User\Form\PasswordChangeForn;
 use User\Form\PasswordResetForm;
 use User\Form\UserForm;
 use User\Service\UserManager;
@@ -163,14 +162,14 @@ class UserController extends AbstractActionController
             $form->setData($data);
             if ($form->isValid()) {
                 $user = $this->entityManager->getRepository(User::class)->findOneByEmail($data['email']);
-                if (null !== $user && User::ACTIVE === $user->getStatus()) {
+                if (null !== $user && User::ACTIVE === (int) $user->getStatus()) {
                     $this->userManager->createPasswordResetToken($user);
 
                     // Redirect to "message" page
                     return $this->redirect()->toRoute('users', ['action' => 'message', 'id' => 'sent']);
                 }
 
-                return $this->redirect()->toRoute('users', ['action '=> 'message', 'id'=>'invalid-email']);
+                return $this->redirect()->toRoute('users', ['action'=> 'message', 'id' => 'invalid-email']);
             }
         }
         return new ViewModel([
@@ -198,6 +197,7 @@ class UserController extends AbstractActionController
         $email = $this->params()->fromQuery('email', null);
         $token = $this->params()->fromQuery('token', null);
 
+
         $this->validateToken($email, $token);
 
         $form = new PasswordChangeForm('reset');
@@ -211,7 +211,7 @@ class UserController extends AbstractActionController
                     return $this->redirect()->toRoute('users', ['action '=> 'message', 'id' => 'set']);
                 }
 
-                return $this->redirect()->toRoute('users', ['action'=>'message', 'id' => 'failed']);
+                return $this->redirect()->toRoute('users', ['action' => 'message', 'id' => 'failed']);
             }
         }
 
@@ -243,7 +243,7 @@ class UserController extends AbstractActionController
             throw new \Exception('Invalid token type or length');
         }
 
-        if ($token===null ||
+        if ($token === null ||
             !$this->userManager->validateToken($email, $token)) {
             return $this->redirect()->toRoute('users',
                 ['action'=>'message', 'id'=>'failed']);

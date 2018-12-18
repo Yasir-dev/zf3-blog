@@ -11,6 +11,7 @@ use Zend\Mail\Transport\Smtp as SmtpTransport;
 use Zend\Mail\Transport\SmtpOptions;
 use Zend\Mime\Message as MimeMessage;
 use Zend\Mime\Part as MimePart;
+use Zend\Mvc\Service\ViewPhpRendererFactory;
 
 class UserManager
 {
@@ -91,7 +92,8 @@ class UserManager
 
     public function createPasswordResetToken(User $user)
     {
-        if (User::ACTIVE !== $user->setStatus()) {
+//        \var_dump($user->getStatus());exit;
+        if (User::ACTIVE !== $user->getStatus()) {
             throw new \Exception('User account is not active ' . $user->getEmail());
         }
 
@@ -151,7 +153,7 @@ class UserManager
         $mail = new MailMessage();
         $mail->setEncoding('UTF-8');
         $mail->setBody($body);
-        $mail->setFrom('no-reply@example.com', 'User Demo');
+        $mail->setFrom('aws.ses.testing2018@gmail.com', 'User Demo');
         $mail->addTo($user->getEmail(), $user->getFullName());
         $mail->setSubject('Password Reset');
 
@@ -188,7 +190,8 @@ class UserManager
          */
         $user = $this->getUser($email);
 
-        if (null !== $user || User::ACTIVE !== $user->getStatus()) {
+
+        if (null === $user || User::ACTIVE !== $user->getStatus()) {
             return false;
         }
 
@@ -196,7 +199,7 @@ class UserManager
             return true;
         }
 
-        if (\strtotime('now') - $user->getPasswordResetTokenCreationDate() > 24*60*60) {
+        if (\strtotime('now') - \strtotime($user->getPasswordResetTokenCreationDate()) > 24*60*60) {
             return false; // expired
         }
 

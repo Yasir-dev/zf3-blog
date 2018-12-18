@@ -2,6 +2,7 @@
 
 namespace User\Form;
 
+use Zend\Captcha\Dumb;
 use Zend\Captcha\Figlet;
 use Zend\Captcha\Image;
 use Zend\Filter\StringTrim;
@@ -35,7 +36,7 @@ class PasswordResetForm extends Form
         $captcha = new Captcha();
         $captcha->setName('captcha');
 
-        $captcha->setCaptcha(new Figlet());
+        $captcha->setCaptcha(new Dumb());
         $this->add($captcha);
 
         $csrf = (new Csrf())

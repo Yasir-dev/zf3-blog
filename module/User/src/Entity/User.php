@@ -161,7 +161,7 @@ class User
      */
     public function getStatus()
     {
-        return $this->status;
+        return (int) $this->status;
     }
 
     /**

@@ -13,6 +13,7 @@ use Application\Controller\Factory\IndexControllerFactory;
 use Application\Controller\PostController;
 use Application\Service\PostManager;
 use Application\Service\Factory\PostManagerFactory;
+use Application\View\Helper\Breadcrumb;
 use Application\View\Helper\Menu;
 use Doctrine\ORM\Mapping\Driver\AnnotationDriver;
 use Zend\Router\Http\Literal;
@@ -91,10 +92,12 @@ return [
 
     'view_helpers' => [
         'factories' => [
-            View\Helper\Menu::class => InvokableFactory::class,
+            Menu::class => InvokableFactory::class,
+            Breadcrumb::class => InvokableFactory::class,
         ],
         'aliases' => [
-            'mainMenu' => Menu::class
+            'mainMenu' => Menu::class,
+            'pageBreadcrumbs' => Breadcrumb::class,
         ]
     ],
 

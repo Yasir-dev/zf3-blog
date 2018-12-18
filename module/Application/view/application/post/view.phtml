@@ -6,6 +6,12 @@
 $this->headTitle('View Post');
 $this->mainMenu()->setActiveItem('myPosts');
 
+$this->pageBreadcrumbs()->setItems([
+    'Home'  => $this->url('home'),
+    'Posts' => $this->url('posts', ['action' => 'admin']),
+    'View'  => $this->url('posts', ['action' => 'view']),
+]);
+
 $form = $this->form;
 $form->get('author')
     ->setAttribute('class', 'form-control')

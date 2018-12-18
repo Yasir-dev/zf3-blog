@@ -7,14 +7,8 @@ use Zend\View\Helper\AbstractHelper;
 
 class Menu extends AbstractHelper
 {
-
     private $items = [];
     protected $activeItem;
-
-    public function __construct($items = [])
-    {
-        $this->items = $items;
-    }
 
     /**
      * @param array $items
@@ -46,7 +40,7 @@ class Menu extends AbstractHelper
             $isActive = ($id == $this->activeItem);
 
             $label = isset($item['label'])   ? $item['label'] : '';
-            $link = isset($item['link']) ? $item['link'] : '#';
+            $link =  isset($item['link']) ? $item['link'] : '#';
 
             $result .= '<li class="' . ($isActive?'active':'') . '">';
             $result .= '<a href="'.$link.'">'.$label.'</a>';

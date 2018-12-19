@@ -34,19 +34,31 @@ class Menu extends AbstractHelper
 
     public function render()
     {
-        $result = '';
+        $items = '';
         foreach ($this->items as $item) {
-            $id = isset($item['id']) ? $item['id'] : '';
-            $isActive = ($id == $this->activeItem);
-
-            $label = isset($item['label'])   ? $item['label'] : '';
-            $link =  isset($item['link']) ? $item['link'] : '#';
-
-            $result .= '<li class="' . ($isActive?'active':'') . '">';
-            $result .= '<a href="'.$link.'">'.$label.'</a>';
-            $result .= '</li>';
+            $items .= $this->getItem($item);
         }
 
-        return $result;
+        return $items;
+    }
+
+    private function getItem($item)
+    {
+        if ($this->activeItem === $item['id']) {
+            return \sprintf(
+                '<li class="active">%s</li>',
+                $this->getAnchorTag($item['link'], $item['label'])
+            );
+        }
+
+        return \sprintf(
+            '<li>%s</li>',
+            $this->getAnchorTag($item['link'], $item['label'])
+        );
+    }
+
+    private function getAnchorTag($link, $label)
+    {
+        return \sprintf('<a href="%s">%s</a>', $link, $label);
     }
 }

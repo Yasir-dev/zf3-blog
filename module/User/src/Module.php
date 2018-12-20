@@ -7,6 +7,8 @@
 
 namespace User;
 
+use Zend\Config\Factory;
+
 class Module
 {
     public function getConfig()
